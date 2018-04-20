@@ -7,10 +7,8 @@ import (
 )
 
 func main() {
-
 	http.HandleFunc("/", helloWorld)
 	fmt.Printf("listening...")
-
 	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
