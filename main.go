@@ -3,18 +3,16 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"log"
 	"os"
 )
 
 func main() {
 	http.HandleFunc("/", helloWorld)
-	fmt.Println("listening...")
-	err := http.ListenAndServe(":"+os.Getenv("PORT"), nil)
-	if err != nil {
-		panic(err)
-	}
+	fmt.Printf("listening...")
+	log.Fatal(http.ListenAndServe(":" + os.Getenv("Path"), nil))
 }
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello, World!!")
+	fmt.Fprint(w, "Hello, World!!")
 }
