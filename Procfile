@@ -1,1 +1,1 @@
-web: ppl-reservation-beta
+web: ppl-reservation
