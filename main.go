@@ -16,3 +16,7 @@ func main() {
 func helloWorld(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello, World!!")
 }
+
+func myPrint(string string){
+	fmt.Printf(string)
+}
