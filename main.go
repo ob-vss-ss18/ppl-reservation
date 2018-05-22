@@ -215,3 +215,7 @@ func response(r *http.Request, w http.ResponseWriter, status int, bytes []byte) 
 		r.Method, r.URL.Path, r.Proto, status, len(bytes),
 	)
 }
+
+func myPrint(string string){
+	fmt.Printf(string)
+}
