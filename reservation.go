@@ -19,7 +19,29 @@ type Reservation struct {
 
 func InitializeUserDB() {
 
-	Res = funcName()
+	Res1 := Reservation{
+		id: 1,
+		cId: 1,
+		itemId: 1,
+	}
+
+	Res2 := Reservation{
+		id: 2,
+		cId: 1,
+		itemId: 2,
+	}
+
+	Res3 := Reservation{
+		id: 3,
+		cId: 2,
+		itemId: 3,
+	}
+
+	Reservations = map[int]Reservation{
+		1: Res1,
+		2: Res2,
+		3: Res3,
+	}
 
 	reservationType = graphql.NewObject(graphql.ObjectConfig{
 		Name:        "Reservation",
