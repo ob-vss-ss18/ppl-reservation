@@ -3,15 +3,26 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"log"
+	"github.com/graphql-go/handler"
 	"os"
+	"log"
 )
 
 func main() {
+	h := handler.New(&handler.Config{
+		Schema:   &ReservationSchema,
+		Pretty:   true,
+		GraphiQL: true,
+	})
+
+	//toDo change /query to something other!!
+	http.Handle("/query",h)
 	http.HandleFunc("/", helloWorld)
 	fmt.Printf("listening...")
-	log.Fatal(http.ListenAndServe(":" + os.Getenv("PORT"), nil))
+
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
+
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello, World!!")
