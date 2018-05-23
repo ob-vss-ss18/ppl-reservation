@@ -59,13 +59,13 @@ func getReservations(db *sql.DB, id int) ([]Reservation, error) {
 }
 
 func setReservation(db *sql.DB, cId int, itemId int) (bool, error) {
+	var id int
 	err := db.QueryRow(`INSERT INTO reservations(cId, itemId)
-	VALUES($1, $2) RETURNING id`, cId, itemId).Scan()
+	VALUES($1, $2) RETURNING id`, cId, itemId).Scan(&id)
 
 	if err != nil {
 		return false, err
-	}else {
+	} else {
 		return true, nil
 	}
 }
-
