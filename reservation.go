@@ -1,12 +1,20 @@
 package main
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+	"database/sql"
+	"os"
+	"log"
+)
 
 var (
 	ReservationSchema graphql.Schema
 	reservationType   *graphql.Object
 
 	Reservations map[int]Reservation
+
+	db  *sql.DB
+	err error
 )
 
 type Reservation struct {
@@ -15,32 +23,25 @@ type Reservation struct {
 	itemId int
 }
 
-func initReservations() {
-
-	Res1 := Reservation{
-		id:     1,
-		cId:    1,
-		itemId: 1,
+func initDatabase() {
+	url, ok := os.LookupEnv("DATABASE_URL")
+	if !ok {
+		log.Fatalln("$DATABASE_URL is required")
 	}
 
-	Res2 := Reservation{
-		id:     2,
-		cId:    1,
-		itemId: 2,
+	db, err = connect(url)
+	if err != nil {
+		log.Fatalf("Connection error: %s", err.Error())
 	}
+}
 
-	Res3 := Reservation{
-		id:     3,
-		cId:    2,
-		itemId: 3,
-	}
+func initGraphQl() {
 
-	Reservations = map[int]Reservation{
-		0: Res1,
-		1: Res2,
-		2: Res3,
-	}
+	initDatabase()
 
+	/**
+	Create a graphql object
+	 */
 	reservationType = graphql.NewObject(graphql.ObjectConfig{
 		Name:        "Reservation",
 		Description: "This is a reservation.",
@@ -49,7 +50,7 @@ func initReservations() {
 				Type:        graphql.NewNonNull(graphql.Int),
 				Description: "The id of the reservation.",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					reservation, ok := p.Source.(Reservation);
+					reservation, ok := p.Source.(Reservation)
 					if ok {
 						return reservation.id, nil
 					}
@@ -60,7 +61,7 @@ func initReservations() {
 				Type:        graphql.NewNonNull(graphql.Int),
 				Description: "The id of a costumer!!! ",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					reservation, ok := p.Source.(Reservation);
+					reservation, ok := p.Source.(Reservation)
 					if ok {
 						return reservation.cId, nil
 					}
@@ -71,7 +72,7 @@ func initReservations() {
 				Type:        graphql.NewNonNull(graphql.Int),
 				Description: "The id of a item!!! ",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					reservation, ok := p.Source.(Reservation);
+					reservation, ok := p.Source.(Reservation)
 					if ok {
 						return reservation.itemId, nil
 					}
@@ -94,14 +95,10 @@ func initReservations() {
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					cId := p.Args["cId"].(int)
+
 					var reservationSlice []Reservation
-					idx := 0
-					for _, reservation := range Reservations {
-						if (reservation.cId == cId) {
-							reservationSlice = append(reservationSlice, reservation)
-							idx++
-						}
-					}
+					reservationSlice, err = getReservations(db, cId)
+
 					return reservationSlice, nil
 				},
 			},
@@ -126,16 +123,13 @@ func initReservations() {
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					cId := p.Args["cId"].(int)
 					itemId := p.Args["itemId"].(int)
-					idx := 0
+
 					//toDo get information from STOCK check if item is already reserved
-					for _, reservation := range Reservations {
-						if (reservation.itemId == itemId) {
-							return false, nil
-							idx++
-						}
-					}
-					Reservations[len(Reservations)] = Reservation{len(Reservations), cId, itemId}
-					return true, nil
+
+					var reserved bool
+					reserved, err = setReservation(db, cId, itemId)
+
+					return reserved, err
 				},
 			},
 		},
@@ -144,8 +138,4 @@ func initReservations() {
 	ReservationSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
 		Query:    queryType,
 		Mutation: mutationType,})
-}
-
-func GetReservation(cId int) Reservation {
-	return Reservation{1, 1, 1}
 }

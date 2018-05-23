@@ -5,11 +5,12 @@ import (
 	"net/http"
 	"github.com/graphql-go/handler"
 	"log"
+	"os"
 )
 
 func main() {
 
-	initReservations()
+	initGraphQl()
 
 	h := handler.New(&handler.Config{
 		Schema:   &ReservationSchema,
@@ -17,19 +18,18 @@ func main() {
 		GraphiQL: true,
 	})
 
-	http.Handle("/reservations",h)
-	http.Handle("/reserve",h)
+	http.Handle("/reservations", h)
+	http.Handle("/reserve", h)
 	http.HandleFunc("/", helloWorld)
 	fmt.Printf("listening...")
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
-
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello, World!!")
 }
 
-func myPrint(string string){
+func myPrint(string string) {
 	fmt.Printf(string)
 }
