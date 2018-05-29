@@ -79,6 +79,28 @@ func initGraphQl() {
 					return nil, nil
 				},
 			},
+			"date_from": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "Start of reservation",
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					reservation, ok := p.Source.(Reservation)
+					if ok {
+						return reservation.date_from, nil
+					}
+					return nil, nil
+				},
+			},
+			"date_to": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "End of reservation",
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					reservation, ok := p.Source.(Reservation)
+					if ok {
+						return reservation.date_to, nil
+					}
+					return nil, nil
+				},
+			},
 		},
 	})
 
