@@ -21,8 +21,8 @@ func connect(dbURL string) (*sql.DB, error) {
       id       SERIAL,
       cId INTEGER,
 	  itemId INTEGER,
-	  date_from DATE,
-	  date_to DATE
+	  date_from VARCHAR(32),
+	  date_to VARCHAR(32)
     );
   `)
 	if err != nil {
@@ -61,7 +61,7 @@ func getReservations(db *sql.DB, id int) ([]Reservation, error) {
 func setReservation(db *sql.DB, cId int, itemId int, date_from string, date_to string) (bool, error) {
 
 	var id int
-	err := db.QueryRow(`INSERT INTO reservations(cId, itemId, to_date(date_from, "DD.MM.YYYY"), to_date(date_to, "DD.MM.YYYY"))
+	err := db.QueryRow(`INSERT INTO reservations(cId, itemId, date_from, date_to)
 	VALUES($1, $2, $3, $4) RETURNING id`, cId, itemId, date_from, date_to).Scan(&id)
 
 	if err != nil {
