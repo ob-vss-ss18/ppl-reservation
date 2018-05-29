@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	"time"
+	"log"
 )
 
 func connect(dbURL string) (*sql.DB, error) {
@@ -63,6 +64,11 @@ func setReservation(db *sql.DB, cId int, itemId int, date_from string, date_to s
 
 	parsedDateFrom, _ := time.Parse("02.01.2006", date_from)
 	parsedDateTo, _ := time.Parse("02.01.2006", date_to)
+
+	log.Println("LOOOOOOOOOOOOOOOGGGGGGIIIINBIIIIIIIIIIIRRRDDDD")
+	log.Println(date_from)
+	log.Println(date_to)
+
 
 	var id int
 	err := db.QueryRow(`INSERT INTO reservations(cId, itemId, date_from, date_to)
