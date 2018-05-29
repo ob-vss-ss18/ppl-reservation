@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
+	"time"
 )
 
 func connect(dbURL string) (*sql.DB, error) {
@@ -61,8 +62,8 @@ func getReservations(db *sql.DB, id int) ([]Reservation, error) {
 
 func setReservation(db *sql.DB, cId int, itemId int, date_from string, date_to string) (bool, error) {
 
-	//parsedDateFrom, _ := time.Parse("02.01.2006", date_from)
-	//parsedDateTo, _ := time.Parse("02.01.2006", date_to)
+	parsedDateFrom, _ := time.Parse("02.01.2006", date_from)
+	parsedDateTo, _ := time.Parse("02.01.2006", date_to)
 
 	log.Println("LOOOOOOOOOOOOOOOGGGGGGIIIINBIIIIIIIIIIIRRRDDDD")
 	log.Println(date_from)
@@ -71,7 +72,7 @@ func setReservation(db *sql.DB, cId int, itemId int, date_from string, date_to s
 
 	var id int
 	err := db.QueryRow(`INSERT INTO reservations(cId, itemId, date_from, date_to)
-	VALUES($1, $2, $3, $4) RETURNING id`, cId, itemId, date_from, date_to).Scan(&id)
+	VALUES($1, $2, $3, $4) RETURNING id`, cId, itemId, parsedDateFrom, parsedDateTo).Scan(&id)
 
 	if err != nil {
 		return false, err
