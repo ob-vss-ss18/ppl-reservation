@@ -16,11 +16,11 @@ var (
 )
 
 type Reservation struct {
-	id     int
-	cId    int
-	itemId int
+	id        int
+	cId       int
+	itemId    int
 	date_from string
-	date_to string
+	date_to   string
 }
 
 func initDatabase() {
@@ -119,15 +119,25 @@ func initGraphQl() {
 						Description: "id of the item",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
+					"date_from": &graphql.ArgumentConfig{
+						Description: "start of the reservation",
+						Type:        graphql.NewNonNull(graphql.String),
+					},
+					"date_to": &graphql.ArgumentConfig{
+						Description: "end of the reservation",
+						Type:        graphql.NewNonNull(graphql.String),
+					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					cId := p.Args["cId"].(int)
 					itemId := p.Args["itemId"].(int)
+					date_from := p.Args["date_from"].(string)
+					date_to := p.Args["date_to"].(string)
 
 					//toDo get information from STOCK check if item is already reserved
 
 					var reserved bool
-					reserved, err = setReservation(db, cId, itemId, "12.12.2018", "15.12.2018")
+					reserved, err = setReservation(db, cId, itemId, date_from, date_to)
 
 					return reserved, err
 				},
