@@ -11,8 +11,6 @@ var (
 	ReservationSchema graphql.Schema
 	reservationType   *graphql.Object
 
-	Reservations map[int]Reservation
-
 	db  *sql.DB
 	err error
 )

@@ -18,9 +18,8 @@ func main() {
 		GraphiQL: true,
 	})
 
-	http.Handle("/reservations", h)
-	http.Handle("/reserve", h)
-	http.HandleFunc("/", helloWorld)
+	http.Handle("/", h)
+	http.HandleFunc("/hello", helloWorld)
 	fmt.Printf("listening...")
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
