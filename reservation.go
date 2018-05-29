@@ -19,6 +19,8 @@ type Reservation struct {
 	id     int
 	cId    int
 	itemId int
+	date_from string
+	date_to string
 }
 
 func initDatabase() {

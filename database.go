@@ -5,8 +5,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var ()
-
 func connect(dbURL string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -48,7 +46,7 @@ func getReservations(db *sql.DB, id int) ([]Reservation, error) {
 	for rows.Next() {
 		u := Reservation{}
 
-		err = rows.Scan(&u.id, &u.cId, &u.itemId)
+		err = rows.Scan(&u.id, &u.cId, &u.itemId, &u.date_from, &u.date_to)
 
 		if err != nil {
 			return nil, err
