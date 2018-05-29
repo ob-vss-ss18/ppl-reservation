@@ -125,7 +125,7 @@ func initGraphQl() {
 					//toDo get information from STOCK check if item is already reserved
 
 					var reserved bool
-					reserved, err = setReservation(db, cId, itemId)
+					reserved, err = setReservation(db, cId, itemId, "12.12.2018", "15.12.2018")
 
 					return reserved, err
 				},
