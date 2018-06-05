@@ -30,14 +30,17 @@ func main() {
 		GraphiQL: true,
 	})
 
-	http.Handle("/", reserve)
-	http.Handle("/", reservations)
-	http.Handle("/", reservation)
+	http.Handle("/reserve", reserve)
+	http.Handle("/reservations", reservations)
+	http.Handle("/reservation", reservation)
 
 	http.HandleFunc("/hello", helloWorld)
 	fmt.Printf("listening...")
 
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reserve))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservations))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservation))
+
 
 
 }
