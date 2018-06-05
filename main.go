@@ -18,7 +18,7 @@ func main() {
 		GraphiQL: true,
 	})
 
-	reservations := handler.New(&handler.Config{
+	/*reservations := handler.New(&handler.Config{
 		Schema:   &ReservationsSchema,
 		Pretty:   true,
 		GraphiQL: true,
@@ -28,18 +28,18 @@ func main() {
 		Schema:   &ReservationSchema,
 		Pretty:   true,
 		GraphiQL: true,
-	})
+	})*/
 
 	http.Handle("/reserve", reserve)
-	http.Handle("/reservations", reservations)
-	http.Handle("/reservation", reservation)
+	//http.Handle("/reservations", reservations)
+	//http.Handle("/reservation", reservation)
 
 	http.HandleFunc("/hello", helloWorld)
 	fmt.Printf("listening...")
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reserve))
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservations))
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservation))
+	//log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservations))
+	//log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservation))
 
 
 
