@@ -140,7 +140,7 @@ func initGraphQl() {
 
 					var reservation, err = getReservation(db, id)
 
-					log.Fatalf("ERÄÄÄÄRRRRÖRÖRÖRÖRÖRÖRÖÖR: %s", err)
+					log.Println("ERÄÄÄÄRRRRÖRÖRÖRÖRÖRÖRÖÖR: %s", err)
 
 					return reservation, nil
 				},
