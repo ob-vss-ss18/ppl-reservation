@@ -34,19 +34,32 @@ func connect(dbURL string) (*sql.DB, error) {
 	return db, nil
 }
 
-func getReservation(db *sql.DB, id int) (Reservation, error) {
+func getReservation(db *sql.DB, id int) ([]Reservation, error) {
 
-	var reservation Reservation
-
-	err = db.QueryRow(`SELECT * FROM reservations WHERE id = $1`, id).Scan(&reservation)
-	if err == sql.ErrNoRows {
-		log.Fatal("No reservation found")
-	}
+	rows, err := db.Query(
+		`SELECT * FROM reservations WHERE id = $1`, id)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return reservation, nil
+	defer rows.Close()
+
+	// TODO max reservations 5?
+	reservations := make([]Reservation, 0, 5)
+
+	for rows.Next() {
+		u := Reservation{}
+
+		err = rows.Scan(&u.id, &u.cId, &u.itemId, &u.date_from, &u.date_to)
+
+		if err != nil {
+			return nil, err
+		}
+
+		reservations = append(reservations, u)
+	}
+
+	return reservations, nil
 }
 
 func getReservations(db *sql.DB, id int) ([]Reservation, error) {

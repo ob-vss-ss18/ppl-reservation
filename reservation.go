@@ -126,7 +126,7 @@ func initGraphQl() {
 				},
 			},
 			"reservation": &graphql.Field{
-				Type: reservationType,
+				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Description: "id of the reservation",
@@ -136,13 +136,10 @@ func initGraphQl() {
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					id := p.Args["id"].(int)
 
+					var reservationSlice []Reservation
+					reservationSlice, err = getReservation(db, id)
 
-
-					var reservation, err = getReservation(db, id)
-
-					log.Println("ERÄÄÄÄRRRRÖRÖRÖRÖRÖRÖRÖÖR: %s", err)
-
-					return reservation, nil
+					return reservationSlice, nil
 				},
 			},
 		},
