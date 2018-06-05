@@ -136,7 +136,11 @@ func initGraphQl() {
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					id := p.Args["id"].(int)
 
-					var reservation, _ = getReservation(db, id)
+
+
+					var reservation, err = getReservation(db, id)
+
+					log.Fatalf("ERÄÄÄÄRRRRÖRÖRÖRÖRÖRÖRÖÖR: %s", err)
 
 					return reservation, nil
 				},
