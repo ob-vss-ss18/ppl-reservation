@@ -8,10 +8,9 @@ import (
 )
 
 var (
-	ReservationSchema graphql.Schema
 	ReservationsSchema graphql.Schema
-	MutationSchema graphql.Schema
-	reservationType   *graphql.Object
+	MutationSchema     graphql.Schema
+	reservationType    *graphql.Object
 
 	db  *sql.DB
 	err error
@@ -126,12 +125,6 @@ func initGraphQl() {
 					return reservationSlice, nil
 				},
 			},
-		},
-	})
-
-	queryReservation := graphql.NewObject(graphql.ObjectConfig{
-		Name: "Query",
-		Fields: graphql.Fields{
 			"reservation": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
@@ -191,12 +184,7 @@ func initGraphQl() {
 		},
 	})
 
-	ReservationSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
-		Query:   queryReservation,})
-
 	ReservationsSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
-		Query:   queryReservations,})
-
-	MutationSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
-		Mutation:   mutationType,})
+		Query:    queryReservations,
+		Mutation: mutationType})
 }
