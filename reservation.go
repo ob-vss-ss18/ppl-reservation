@@ -131,9 +131,7 @@ func initGraphQl() {
 
 	queryReservation := graphql.NewObject(graphql.ObjectConfig{
 		Name: "QueryReservation",
-		Fields: graphql.Fields{
-			"reservation": &graphql.Field{
-				Type: graphql.NewList(reservationType),
+		Fields: graphql.Field{
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Description: "id of the reservation",
@@ -148,7 +146,6 @@ func initGraphQl() {
 
 					return reservation, nil
 				},
-			},
 		},
 	})
 
