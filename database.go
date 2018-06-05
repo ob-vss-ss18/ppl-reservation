@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	_ "github.com/lib/pq"
+	"log"
 )
 
 func connect(dbURL string) (*sql.DB, error) {
@@ -30,6 +31,21 @@ func connect(dbURL string) (*sql.DB, error) {
 	}
 
 	return db, nil
+}
+
+func getReservation(db *sql.DB, id int) (Reservation, error) {
+
+	var reservation Reservation
+
+	err = db.QueryRow(`SELECT * FROM reservations WHERE id = $1`, id).Scan(&reservation)
+	if err == sql.ErrNoRows {
+		log.Fatal("No reservation found")
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return reservation, nil
 }
 
 func getReservations(db *sql.DB, id int) ([]Reservation, error) {

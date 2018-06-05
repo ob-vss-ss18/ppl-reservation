@@ -9,6 +9,8 @@ import (
 
 var (
 	ReservationSchema graphql.Schema
+	ReservationsSchema graphql.Schema
+	MutationSchema graphql.Schema
 	reservationType   *graphql.Object
 
 	db  *sql.DB
@@ -104,7 +106,7 @@ func initGraphQl() {
 		},
 	})
 
-	queryType := graphql.NewObject(graphql.ObjectConfig{
+	queryReservations := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
 			"reservations": &graphql.Field{
@@ -122,6 +124,29 @@ func initGraphQl() {
 					reservationSlice, err = getReservations(db, cId)
 
 					return reservationSlice, nil
+				},
+			},
+		},
+	})
+
+	queryReservation := graphql.NewObject(graphql.ObjectConfig{
+		Name: "Query",
+		Fields: graphql.Fields{
+			"reservation": &graphql.Field{
+				Type: graphql.NewList(reservationType),
+				Args: graphql.FieldConfigArgument{
+					"id": &graphql.ArgumentConfig{
+						Description: "id of the customer",
+						Type:        graphql.NewNonNull(graphql.Int),
+					},
+				},
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					id := p.Args["id"].(int)
+
+
+					var reservation, _ = getReservation(db, id)
+
+					return reservation, nil
 				},
 			},
 		},
@@ -168,6 +193,11 @@ func initGraphQl() {
 	})
 
 	ReservationSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
-		Query:    queryType,
-		Mutation: mutationType,})
+		Query:   queryReservation,})
+
+	ReservationsSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
+		Query:   queryReservations,})
+
+	MutationSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
+		Mutation:   queryReservations,})
 }

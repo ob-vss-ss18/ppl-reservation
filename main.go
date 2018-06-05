@@ -12,13 +12,28 @@ func main() {
 
 	initGraphQl()
 
-	h := handler.New(&handler.Config{
+	reserve := handler.New(&handler.Config{
+		Schema:   &MutationSchema,
+		Pretty:   true,
+		GraphiQL: true,
+	})
+
+	reservations := handler.New(&handler.Config{
+		Schema:   &ReservationsSchema,
+		Pretty:   true,
+		GraphiQL: true,
+	})
+
+	reservation := handler.New(&handler.Config{
 		Schema:   &ReservationSchema,
 		Pretty:   true,
 		GraphiQL: true,
 	})
 
-	http.Handle("/", h)
+	http.Handle("/", reserve)
+	http.Handle("/", reservations)
+	http.Handle("/", reservation)
+
 	http.HandleFunc("/hello", helloWorld)
 	fmt.Printf("listening...")
 
