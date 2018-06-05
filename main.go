@@ -13,7 +13,7 @@ func main() {
 	initGraphQl()
 
 	reserve := handler.New(&handler.Config{
-		Schema:   &ReservationsSchema,
+		Schema:   &ReservationSchema,
 		Pretty:   true,
 		GraphiQL: true,
 	})
