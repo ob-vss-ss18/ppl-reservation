@@ -126,7 +126,7 @@ func initGraphQl() {
 				},
 			},
 			"reservation": &graphql.Field{
-				Type: graphql.NewList(reservationType),
+				Type: reservationType,
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Description: "id of the reservation",
