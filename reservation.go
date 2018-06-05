@@ -199,5 +199,5 @@ func initGraphQl() {
 		Query:   queryReservations,})
 
 	MutationSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
-		Mutation:   queryReservations,})
+		Mutation:   mutationType,})
 }
