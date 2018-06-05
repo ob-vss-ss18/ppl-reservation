@@ -123,6 +123,10 @@ func initGraphQl() {
 					var reservationSlice []Reservation
 					reservationSlice, err = getReservations(db, cId)
 
+					if(err != nil){
+						log.Fatal(err)
+					}
+
 					return reservationSlice, nil
 				},
 			},
@@ -144,8 +148,10 @@ func initGraphQl() {
 					id := p.Args["id"].(int)
 
 
-					var reservation, _ = getReservation(db, id)
-
+					var reservation, err = getReservation(db, id)
+					if(err != nil){
+						log.Fatal(err)
+					}
 					return reservation, nil
 				},
 			},
