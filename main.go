@@ -37,7 +37,7 @@ func main() {
 	http.HandleFunc("/hello", helloWorld)
 	fmt.Printf("listening...")
 
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reserve))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 	//log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservations))
 	//log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), reservation))
 
