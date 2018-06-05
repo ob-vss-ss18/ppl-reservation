@@ -123,10 +123,6 @@ func initGraphQl() {
 					var reservationSlice []Reservation
 					reservationSlice, err = getReservations(db, cId)
 
-					if(err != nil){
-						log.Fatal(err)
-					}
-
 					return reservationSlice, nil
 				},
 			},
@@ -134,13 +130,13 @@ func initGraphQl() {
 	})
 
 	queryReservation := graphql.NewObject(graphql.ObjectConfig{
-		Name: "Query",
+		Name: "QueryReservation",
 		Fields: graphql.Fields{
 			"reservation": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
-						Description: "id of the customer",
+						Description: "id of the reservation",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
 				},
@@ -148,10 +144,8 @@ func initGraphQl() {
 					id := p.Args["id"].(int)
 
 
-					var reservation, err = getReservation(db, id)
-					if(err != nil){
-						log.Fatal(err)
-					}
+					var reservation, _ = getReservation(db, id)
+
 					return reservation, nil
 				},
 			},
