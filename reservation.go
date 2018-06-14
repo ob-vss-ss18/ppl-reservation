@@ -24,6 +24,11 @@ type Reservation struct {
 	date_to   string
 }
 
+type User struct {
+	id	int
+	email string
+}
+
 func initDatabase() {
 	url, ok := os.LookupEnv("DATABASE_URL")
 	if !ok {
@@ -35,6 +40,8 @@ func initDatabase() {
 		log.Fatalf("Connection error: %s", err.Error())
 	}
 }
+
+
 
 func initGraphQl() {
 
@@ -134,11 +141,10 @@ func initGraphQl() {
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 
 					// TODO CHECK FOR AUTH
-					user := p.Args["user"]
+					user := p.Args["user"].(User)
 					cId := p.Args["cId"].(int)
 
-					log.Fatal(user)
-					fmt.Sprintf("%b", user)
+					fmt.Println(user.email)
 
 					var reservationSlice []Reservation
 					reservationSlice, err = getReservations(db, cId)
