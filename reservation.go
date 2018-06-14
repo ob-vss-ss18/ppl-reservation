@@ -58,17 +58,7 @@ func initGraphQl() {
 		Name:        "Reservation",
 		Description: "This is a reservation.",
 		Fields: graphql.Fields{
-			"user": &graphql.Field{
-				Type:        userType,
-				Description: "user",
-				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					reservation, ok := p.Source.(Reservation)
-					if ok {
-						return reservation.id, nil
-					}
-					return nil, nil
-				},
-			}, "id": &graphql.Field{
+			"id": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
 				Description: "The id of the reservation.",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -132,10 +122,10 @@ func initGraphQl() {
 			"reservations": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
-					/*"user": &graphql.ArgumentConfig{
+					"user": &graphql.ArgumentConfig{
 						Description: "user",
 						Type:        userType,
-					},*/ "cId": &graphql.ArgumentConfig{
+					}, "cId": &graphql.ArgumentConfig{
 						Description: "id of the customer",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
