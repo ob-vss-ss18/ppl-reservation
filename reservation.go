@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"os"
 	"log"
+	"fmt"
 )
 
 var (
@@ -133,8 +134,11 @@ func initGraphQl() {
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 
 					// TODO CHECK FOR AUTH
-					//user := p.Args["user"]
+					user := p.Args["user"]
 					cId := p.Args["cId"].(int)
+
+					log.Fatal(user)
+					fmt.Sprintf("%b", user)
 
 					var reservationSlice []Reservation
 					reservationSlice, err = getReservations(db, cId)
