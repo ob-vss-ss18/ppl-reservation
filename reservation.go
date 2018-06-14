@@ -132,10 +132,10 @@ func initGraphQl() {
 			"reservations": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
-					"user": &graphql.ArgumentConfig{
+					/*"user": &graphql.ArgumentConfig{
 						Description: "user",
 						Type:        userType,
-					}, "cId": &graphql.ArgumentConfig{
+					},*/ "cId": &graphql.ArgumentConfig{
 						Description: "id of the customer",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
@@ -155,10 +155,10 @@ func initGraphQl() {
 			"reservation": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
-					"user": &graphql.ArgumentConfig{
+					/*"user": &graphql.ArgumentConfig{
 						Description: "user",
 						Type:        userType,
-					},
+					},*/
 					"id": &graphql.ArgumentConfig{
 						Description: "id of the reservation",
 						Type:        graphql.NewNonNull(graphql.Int),
@@ -185,10 +185,10 @@ func initGraphQl() {
 			"reserve": &graphql.Field{
 				Type: graphql.Boolean,
 				Args: graphql.FieldConfigArgument{
-					"user": &graphql.ArgumentConfig{
+					/*"user": &graphql.ArgumentConfig{
 						Description: "user",
 						Type:        userType,
-					}, "cId": &graphql.ArgumentConfig{
+					},*/ "cId": &graphql.ArgumentConfig{
 						Description: "id of the customer",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
