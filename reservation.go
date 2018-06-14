@@ -9,7 +9,6 @@ import (
 
 var (
 	ReservationsSchema graphql.Schema
-	MutationSchema     graphql.Schema
 	reservationType    *graphql.Object
 
 	db  *sql.DB
@@ -40,14 +39,34 @@ func initGraphQl() {
 
 	initDatabase()
 
-	/**
-	Create a graphql object
-	 */
+	// TODO add fields: userRole and token
+	var userType = graphql.NewObject(graphql.ObjectConfig{
+		Name: "User",
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.NewNonNull(graphql.ID),
+			},
+			"email": &graphql.Field{
+				Type: graphql.NewNonNull(graphql.String),
+			},
+		},
+	})
+
 	reservationType = graphql.NewObject(graphql.ObjectConfig{
 		Name:        "Reservation",
 		Description: "This is a reservation.",
 		Fields: graphql.Fields{
-			"id": &graphql.Field{
+			"user": &graphql.Field{
+				Type:        userType,
+				Description: "user",
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					reservation, ok := p.Source.(Reservation)
+					if ok {
+						return reservation.id, nil
+					}
+					return nil, nil
+				},
+			}, "id": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
 				Description: "The id of the reservation.",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -111,12 +130,18 @@ func initGraphQl() {
 			"reservations": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
-					"cId": &graphql.ArgumentConfig{
+					"user": &graphql.ArgumentConfig{
+						Description: "user",
+						Type:        userType,
+					}, "cId": &graphql.ArgumentConfig{
 						Description: "id of the customer",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+
+					// TODO CHECK FOR AUTH
+					//user := p.Args["user"]
 					cId := p.Args["cId"].(int)
 
 					var reservationSlice []Reservation
@@ -128,12 +153,19 @@ func initGraphQl() {
 			"reservation": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
+					"user": &graphql.ArgumentConfig{
+						Description: "user",
+						Type:        userType,
+					},
 					"id": &graphql.ArgumentConfig{
 						Description: "id of the reservation",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+
+					// TODO CHECK FOR AUTH
+					//user := p.Args["user"]
 					id := p.Args["id"].(int)
 
 					var reservationSlice []Reservation
@@ -151,7 +183,10 @@ func initGraphQl() {
 			"reserve": &graphql.Field{
 				Type: graphql.Boolean,
 				Args: graphql.FieldConfigArgument{
-					"cId": &graphql.ArgumentConfig{
+					"user": &graphql.ArgumentConfig{
+						Description: "user",
+						Type:        userType,
+					}, "cId": &graphql.ArgumentConfig{
 						Description: "id of the customer",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
@@ -169,6 +204,9 @@ func initGraphQl() {
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+
+					// TODO check for auth
+					//user := p.Args["user"]
 					cId := p.Args["cId"].(int)
 					itemId := p.Args["itemId"].(int)
 					date_from := p.Args["date_from"].(string)
