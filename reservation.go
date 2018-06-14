@@ -40,17 +40,19 @@ func initGraphQl() {
 	initDatabase()
 
 	// TODO add fields: userRole and token
-	var userType = graphql.NewObject(graphql.ObjectConfig{
-		Name: "User",
-		Fields: graphql.Fields{
-			"id": &graphql.Field{
-				Type: graphql.NewNonNull(graphql.ID),
-			},
-			"email": &graphql.Field{
-				Type: graphql.NewNonNull(graphql.String),
+	var userType = graphql.NewInputObject(
+		graphql.InputObjectConfig{
+			Name: "User",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"id": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewNonNull(graphql.ID),
+				},
+				"email": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
 			},
 		},
-	})
+	)
 
 	reservationType = graphql.NewObject(graphql.ObjectConfig{
 		Name:        "Reservation",
