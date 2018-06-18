@@ -157,10 +157,13 @@ func initGraphQl() {
 
 					fmt.Println(myData)
 
+
 					id := md["id"].(string)
+					fmt.Print("id:")
 					fmt.Println(id)
 
 					email:= md["email"].(string)
+					fmt.Print("Email:")
 					fmt.Print(email)
 
 
