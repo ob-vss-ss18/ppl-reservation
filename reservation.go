@@ -29,6 +29,8 @@ type User struct {
 	email string
 }
 
+
+
 func initDatabase() {
 	url, ok := os.LookupEnv("DATABASE_URL")
 	if !ok {
@@ -143,13 +145,18 @@ func initGraphQl() {
 					// TODO CHECK FOR AUTH
 
 					fmt.Println("Hier sollte es loggen mit fmt")
-					fmt.Println(p.Args["user"])
+					//fmt.Println(p.Args["user"])
+					fmt.Println(p.Args["id"])
+					fmt.Println(p.Args["email"])
 
 					log.Println("Hier sollten es log geben mit log:")
 					log.Println(p.Args["user"])
 
 					//user := p.Args["user"].(User)
 					cId := p.Args["cId"].(int)
+
+
+
 
 					//fmt.Println(user.email)
 
