@@ -153,8 +153,12 @@ func initGraphQl() {
 					log.Println(p.Args["user"])
 
 					myData :=p.Args["user"]
+					md :=myData.(map[string]interface{})
 
 					fmt.Println(myData)
+
+					testVar := md["id"].(int)
+					fmt.Println(testVar)
 
 
 
