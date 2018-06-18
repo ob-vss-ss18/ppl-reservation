@@ -142,7 +142,11 @@ func initGraphQl() {
 
 					// TODO CHECK FOR AUTH
 
-					fmt.Print(p.Args["user"])
+					fmt.Println("Hier sollte es loggen mit fmt")
+					fmt.Println(p.Args["user"])
+
+					log.Println("Hier sollten es log geben mit log:")
+					log.Println(p.Args["user"])
 
 					//user := p.Args["user"].(User)
 					cId := p.Args["cId"].(int)
