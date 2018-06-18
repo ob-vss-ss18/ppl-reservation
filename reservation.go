@@ -141,10 +141,13 @@ func initGraphQl() {
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 
 					// TODO CHECK FOR AUTH
-					user := p.Args["user"].(User)
+
+					fmt.Print(p.Args["user"])
+
+					//user := p.Args["user"].(User)
 					cId := p.Args["cId"].(int)
 
-					fmt.Println(user.email)
+					//fmt.Println(user.email)
 
 					var reservationSlice []Reservation
 					reservationSlice, err = getReservations(db, cId)
