@@ -146,11 +146,18 @@ func initGraphQl() {
 
 					fmt.Println("Hier sollte es loggen mit fmt")
 					//fmt.Println(p.Args["user"])
-					fmt.Println(p.Args["id"])
-					fmt.Println(p.Args["email"])
+					//fmt.Println(p.Args["id"])
+					//fmt.Println(p.Args["email"])
 
 					log.Println("Hier sollten es log geben mit log:")
 					log.Println(p.Args["user"])
+
+					myData :=p.Args["user"]
+
+					fmt.Println(myData)
+
+
+
 
 					//user := p.Args["user"].(User)
 					cId := p.Args["cId"].(int)
