@@ -157,7 +157,7 @@ func initGraphQl() {
 
 					fmt.Println(myData)
 
-					testVar := md["id"].(int)
+					testVar := md["id"].(string)
 					fmt.Println(testVar)
 
 
