@@ -6,6 +6,7 @@ import (
 	"os"
 	"log"
 	"fmt"
+	"strconv"
 )
 
 var (
@@ -158,29 +159,29 @@ func initGraphQl() {
 					fmt.Println(myData)
 
 
-					id := md["id"].(string)
+					idAsString := md["id"].(string)
 					fmt.Print("id: ")
-					fmt.Println(id)
+					fmt.Println(idAsString)
 
 					email:= md["email"].(string)
 					fmt.Print("Email: ")
 					fmt.Println(email)
 
+					id, err := strconv.Atoi(idAsString)
+					if(err==nil && len(email)!=0) {
+						user := User{id: id, email: email}
+						fmt.Println(user)
+						//user := p.Args["user"].(User)
+						cId := p.Args["cId"].(int)
 
+						//fmt.Println(user.email)
 
+						var reservationSlice []Reservation
+						reservationSlice, err = getReservations(db, cId)
 
-					//user := p.Args["user"].(User)
-					cId := p.Args["cId"].(int)
-
-
-
-
-					//fmt.Println(user.email)
-
-					var reservationSlice []Reservation
-					reservationSlice, err = getReservations(db, cId)
-
-					return reservationSlice, nil
+						return reservationSlice, nil
+					}
+					return nil,err
 				},
 			},
 			"reservation": &graphql.Field{
