@@ -29,6 +29,8 @@ type Reservation struct {
 type User struct {
 	id	int
 	email string
+	role string
+	token string
 }
 
 
@@ -60,6 +62,12 @@ func initGraphQl() {
 					Type: graphql.NewNonNull(graphql.ID),
 				},
 				"email": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+				"role": &graphql.InputObjectFieldConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+				"token": &graphql.InputObjectFieldConfig{
 					Type: graphql.NewNonNull(graphql.String),
 				},
 			},
@@ -159,20 +167,14 @@ func initGraphQl() {
 
 					fmt.Println(myData)
 
-
-					idAsString := md["id"].(string)
-					fmt.Print("id: ")
-					fmt.Println(idAsString)
-
 					email:= md["email"].(string)
-					fmt.Print("Email: ")
-					fmt.Println(email)
+					role:= md["role"].(string)
+					token:= md["token"].(string)
 
-					id, err := strconv.Atoi(idAsString)
-					if err==nil && len(email)!=0 {
-						user := User{id: id, email: email}
+					id, err := strconv.Atoi(md["id"].(string))
+					if err==nil && len(email)!=0 &&  len(role)!=0 && len(token)!=0{
+						user := User{id: id, email: email, role: role, token: token}
 						fmt.Println(user)
-						//user := p.Args["user"].(User)
 						cId := p.Args["cId"].(int)
 
 						var reservationSlice []Reservation
