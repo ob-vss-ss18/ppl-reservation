@@ -27,13 +27,11 @@ type Reservation struct {
 }
 
 type User struct {
-	id	int
+	id    int
 	email string
-	role string
+	role  string
 	token string
 }
-
-
 
 func initDatabase() {
 	url, ok := os.LookupEnv("DATABASE_URL")
@@ -46,8 +44,6 @@ func initDatabase() {
 		log.Fatalf("Connection error: %s", err.Error())
 	}
 }
-
-
 
 func initGraphQl() {
 
@@ -154,25 +150,17 @@ func initGraphQl() {
 
 					// TODO CHECK FOR AUTH
 
-					fmt.Println("Hier sollte es loggen mit fmt")
-					//fmt.Println(p.Args["user"])
-					//fmt.Println(p.Args["id"])
-					//fmt.Println(p.Args["email"])
-
-					log.Println("Hier sollten es log geben mit log:")
-					log.Println(p.Args["user"])
-
-					myData :=p.Args["user"]
-					md :=myData.(map[string]interface{})
+					myData := p.Args["user"]
+					md := myData.(map[string]interface{})
 
 					fmt.Println(myData)
 
-					email:= md["email"].(string)
-					role:= md["role"].(string)
-					token:= md["token"].(string)
+					email := md["email"].(string)
+					role := md["role"].(string)
+					token := md["token"].(string)
 
 					id, err := strconv.Atoi(md["id"].(string))
-					if err==nil && len(email)!=0 &&  len(role)!=0 && len(token)!=0{
+					if err == nil && len(email) != 0 && len(role) != 0 && len(token) != 0 {
 						user := User{id: id, email: email, role: role, token: token}
 						fmt.Println(user)
 						cId := p.Args["cId"].(int)
@@ -181,17 +169,16 @@ func initGraphQl() {
 						reservationSlice, err = getReservations(db, cId)
 						return reservationSlice, nil
 					}
-					return nil,errors.New("Invalid User")
+					return nil, errors.New("Invalid User")
 				},
 			},
 			"reservation": &graphql.Field{
 				Type: graphql.NewList(reservationType),
 				Args: graphql.FieldConfigArgument{
-					/*"user": &graphql.ArgumentConfig{
+					"user": &graphql.ArgumentConfig{
 						Description: "user",
 						Type:        userType,
-					},*/
-					"id": &graphql.ArgumentConfig{
+					}, "id": &graphql.ArgumentConfig{
 						Description: "id of the reservation",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
@@ -199,13 +186,28 @@ func initGraphQl() {
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 
 					// TODO CHECK FOR AUTH
-					//user := p.Args["user"]
-					id := p.Args["id"].(int)
 
-					var reservationSlice []Reservation
-					reservationSlice, err = getReservation(db, id)
+					myData := p.Args["user"]
+					md := myData.(map[string]interface{})
 
-					return reservationSlice, nil
+					fmt.Println(myData)
+
+					email := md["email"].(string)
+					role := md["role"].(string)
+					token := md["token"].(string)
+
+					id, err := strconv.Atoi(md["id"].(string))
+					if err == nil && len(email) != 0 && len(role) != 0 && len(token) != 0 {
+						user := User{id: id, email: email, role: role, token: token}
+						fmt.Println(user)
+						id := p.Args["id"].(int)
+
+						var reservationSlice []Reservation
+						reservationSlice, err = getReservation(db, id)
+
+						return reservationSlice, nil
+					}
+					return nil, errors.New("Invalid User")
 				},
 			},
 		},
@@ -217,10 +219,10 @@ func initGraphQl() {
 			"reserve": &graphql.Field{
 				Type: graphql.Boolean,
 				Args: graphql.FieldConfigArgument{
-					/*"user": &graphql.ArgumentConfig{
+					"user": &graphql.ArgumentConfig{
 						Description: "user",
 						Type:        userType,
-					},*/ "cId": &graphql.ArgumentConfig{
+					},"cId": &graphql.ArgumentConfig{
 						Description: "id of the customer",
 						Type:        graphql.NewNonNull(graphql.Int),
 					},
@@ -239,19 +241,35 @@ func initGraphQl() {
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 
-					// TODO check for auth
-					//user := p.Args["user"]
-					cId := p.Args["cId"].(int)
-					itemId := p.Args["itemId"].(int)
-					date_from := p.Args["date_from"].(string)
-					date_to := p.Args["date_to"].(string)
+					// TODO CHECK FOR AUTH
 
-					//toDo get information from STOCK check if item is already reserved
+					myData := p.Args["user"]
+					md := myData.(map[string]interface{})
 
-					var reserved bool
-					reserved, err = setReservation(db, cId, itemId, date_from, date_to)
+					fmt.Println(myData)
 
-					return reserved, err
+					email := md["email"].(string)
+					role := md["role"].(string)
+					token := md["token"].(string)
+
+					id, err := strconv.Atoi(md["id"].(string))
+					if err == nil && len(email) != 0 && len(role) != 0 && len(token) != 0 {
+						user := User{id: id, email: email, role: role, token: token}
+						fmt.Println(user)
+
+						cId := p.Args["cId"].(int)
+						itemId := p.Args["itemId"].(int)
+						date_from := p.Args["date_from"].(string)
+						date_to := p.Args["date_to"].(string)
+
+						//toDo get information from STOCK check if item is already reserved
+
+						var reserved bool
+						reserved, err = setReservation(db, cId, itemId, date_from, date_to)
+
+						return reserved, err
+					}
+					return nil, errors.New("Invalid User")
 				},
 			},
 		},
