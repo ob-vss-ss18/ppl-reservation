@@ -4,7 +4,7 @@ import (
 	"net/smtp"
 	"strconv"
 	"os"
-	"fmt"
+	"log"
 )
 
 func SendMail(recipients []string, msg []byte) {
@@ -15,9 +15,7 @@ func SendMail(recipients []string, msg []byte) {
 	smtpUser := os.Getenv("SMTP_USER")
 
 	if err != nil {
-		// handle error
-		fmt.Println(err)
-		os.Exit(2)
+		log.Fatal(err)
 	}
 
 	auth := smtp.PlainAuth("", smtpUser, smtpPass, smtpHost)
@@ -25,7 +23,7 @@ func SendMail(recipients []string, msg []byte) {
 	err = smtp.SendMail(smtpHost+":"+strconv.Itoa(smtpPort), auth, smtpUser, recipients, msg)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
 }
